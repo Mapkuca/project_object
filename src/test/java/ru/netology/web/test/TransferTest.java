@@ -1,5 +1,6 @@
 package ru.netology.web.test;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.netology.web.data.DataHelper;
@@ -16,24 +17,23 @@ public class TransferTest {
     }
 
     @Test
-    void shouldCorrectTransfer() {
-        var authInfo = DataHelper.getAuthInfo();
-        var verificationPage = loginPage.validLogin(authInfo);
-        var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
-        verificationPage.validVerify(verificationCode);
-    }
-
-    @Test
     void shouldTransfer() {
         var authInfo = DataHelper.getAuthInfo();
         var verificationPage = loginPage.validLogin(authInfo);
         var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
-        var transferAmount = DataHelper.getTransferAmount();
         var dashboardPage = verificationPage.validVerify(verificationCode);
-        int minIndex = dashboardPage.minBalanceIndex();
-        int balance = dashboardPage.getCardBalance(minIndex);
-        var refillPage = dashboardPage.transferTo(minIndex);
-        dashboardPage = refillPage.transferAmount(transferAmount);
-        dashboardPage.validBalance(minIndex, balance + Integer.parseInt(transferAmount.getAmount()));
+        var firstCard = DataHelper.getFirstCard();
+        var secondCard = DataHelper.getSecondCard();
+        var balanceOfFirstCard = dashboardPage.getCardBalance(firstCard.getIndex());
+        var balanceOfSecondCard = dashboardPage.getCardBalance(secondCard.getIndex());
+        var transferAmount = DataHelper.generateValidAmount(balanceOfSecondCard);
+        var expectedBalanceOfFirstCard = balanceOfFirstCard + transferAmount;
+        var expectedBalanceOfSecondCard = balanceOfSecondCard - transferAmount;
+        var refillPage = dashboardPage.transferTo(firstCard.getIndex());
+        dashboardPage = refillPage.ValidTransfer(String.valueOf(transferAmount), secondCard);
+        var actualBalanceOfFirstCard = dashboardPage.getCardBalance(firstCard.getIndex());
+        var actualBalanceOfSecondCard = dashboardPage.getCardBalance(secondCard.getIndex());
+        Assertions.assertEquals(expectedBalanceOfFirstCard, actualBalanceOfFirstCard);
+        Assertions.assertEquals(expectedBalanceOfSecondCard, actualBalanceOfSecondCard);
     }
 }
