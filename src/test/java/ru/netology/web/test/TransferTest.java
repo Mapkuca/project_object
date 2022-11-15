@@ -30,7 +30,7 @@ public class TransferTest {
         var expectedBalanceOfFirstCard = balanceOfFirstCard + transferAmount;
         var expectedBalanceOfSecondCard = balanceOfSecondCard - transferAmount;
         var refillPage = dashboardPage.transferTo(firstCard.getIndex());
-        dashboardPage = refillPage.ValidTransfer(String.valueOf(transferAmount), secondCard);
+        dashboardPage = refillPage.validTransfer(String.valueOf(transferAmount), secondCard);
         var actualBalanceOfFirstCard = dashboardPage.getCardBalance(firstCard.getIndex());
         var actualBalanceOfSecondCard = dashboardPage.getCardBalance(secondCard.getIndex());
         Assertions.assertEquals(expectedBalanceOfFirstCard, actualBalanceOfFirstCard);

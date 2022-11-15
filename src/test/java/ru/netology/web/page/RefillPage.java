@@ -30,7 +30,7 @@ public class RefillPage {
         fromField.setValue(cardNumber.getCardNumber());
         transferButton.click();
     }
-    public DashboardPage ValidTransfer(String transferAmount, DataHelper.CardNumber cardNumber) {
+    public DashboardPage validTransfer(String transferAmount, DataHelper.CardNumber cardNumber) {
         transferAmount(transferAmount, cardNumber);
         return new DashboardPage();
     }
